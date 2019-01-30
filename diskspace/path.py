@@ -65,7 +65,7 @@ class ShowPath:
 
     def getOSInfo(self):
         """ Get the current OS Information with disk usage """
-        total, used, free = shutil.disk_usage(os.path.abspath(os.sep))
+        total, used, free = shutil.disk_usage(os.path.abspath(os.getcwd()))
 
         self.os = OSInfo(
             total, used, free, self.readable(total),
