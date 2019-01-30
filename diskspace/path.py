@@ -97,8 +97,13 @@ class ShowPath:
             size = os.path.getsize(file)
 
             if not os.path.isfile(file):
-                is_folder = True
-                size = self.getDirectorySize(file)
+                try:
+                    is_folder = True
+                    size = self.getDirectorySize(file)
+                except OSError:
+                    print(f"Skipping {file}, no access")
+                    continue
+
 
             if not self.include_folder and is_folder:
                 continue
@@ -138,7 +143,7 @@ class ShowPath:
         os_top = f"{'Size'.ljust(spacing)} {'Used'.ljust(spacing)} {'Avail'.ljust(spacing)} {'Use%'.ljust(spacing)}"
         os_bottom = "-" * spacing * 4
 
-        os = "{1}\n{0.total_human:<{3}} {0.used_human:<{3}} {0.free_human:<{3}} {0.used_percent}%\n{2}\n".format(
+        os = "{2}\n{1}\n{0.total_human:<{3}} {0.used_human:<{3}} {0.free_human:<{3}} {0.used_percent}%\n{2}\n".format(
             current_os, os_top, os_bottom, spacing
         )
 
