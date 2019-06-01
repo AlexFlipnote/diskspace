@@ -18,7 +18,6 @@ setup(
     url='https://github.com/AlexFlipnote/DiskSpace',
     version=version,
     packages=['diskspace'],
-    license='GNU v3',
     description='Making it possible to use Linux df & du command on Windows',
     include_package_data=True,
     entry_points={
@@ -26,5 +25,8 @@ setup(
             'diskspace=diskspace.diskspace:main',
             'ds=diskspace.diskspace:main'
         ]
-    }
+    },
+    classifiers=[
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)'
+    ]
 )
