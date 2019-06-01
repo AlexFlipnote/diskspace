@@ -2,7 +2,7 @@ import shlex
 import diskspace
 import argparse
 
-from . import argpar, utils, path
+from . import argpar, utils, pathRender
 
 
 def shell():
@@ -37,7 +37,7 @@ def shell():
     if args.exclude and args.only:
         utils.exitcode("You can't define what to exclude and what to only include at the same time.")
 
-    print(path.ShowPath(
+    print(pathRender.ShowPath(
         include_folder=nofolders,
         include_stats=nostats,
         exclude=args.exclude,

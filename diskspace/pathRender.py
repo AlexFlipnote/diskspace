@@ -104,7 +104,6 @@ class ShowPath:
                     print(f"Skipping {file}, no access")
                     continue
 
-
             if not self.include_folder and is_folder:
                 continue
 
@@ -148,7 +147,8 @@ class ShowPath:
         )
 
         files = "\n".join(
-            [f"{g.human if self.human else g.bytes:<14} {g.name}"
+            [f"{g.human if self.human else g.bytes:<14} "
+            f"{'/' + g.name if g.folder else g.name}"
             for g in sorted(allFiles, key=lambda x: x.bytes, reverse=True)]
         )
 
