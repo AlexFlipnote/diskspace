@@ -94,7 +94,11 @@ class ShowPath:
         and converts them to class FileInfo """
         for i, file in enumerate(os.listdir(self.path)):
             is_folder = False
-            size = os.path.getsize(file)
+
+            try:
+                size = os.path.getsize(file)
+            except FileNotFoundError:
+                print(f"Skipping {file}, unknown file or symlink")
 
             if not os.path.isfile(file):
                 try:
