@@ -99,6 +99,7 @@ class ShowPath:
                 size = os.path.getsize(file)
             except FileNotFoundError:
                 print(f"Skipping {file}, unknown file or symlink")
+                continue
 
             if not os.path.isfile(file):
                 try:
