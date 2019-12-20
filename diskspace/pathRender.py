@@ -17,7 +17,7 @@ class OSInfo:
     def __repr__(self):
         return '<OSInfo total={0.total} used={0.used} free={0.free}' \
                ' total_human={0.total_human} used_human={0.used_human}' \
-               ' free_human={0.free_human}> used_percent={0.used_percent}'.format(self)
+               ' free_human={0.free_human}> used_percent={0.used_percent}>'.format(self)
 
 
 class FileInfo:
@@ -30,19 +30,20 @@ class FileInfo:
 
     def __repr__(self):
         return '<FileInfo name={0.name} bytes={0.bytes}' \
-               ' human={0.human} folder={0.folder} created={0.created}'.format(self)
+               ' human={0.human} folder={0.folder} created={0.created}>'.format(self)
 
 
 class ShowPath:
-    def __init__(self, path='.', exclude=None, include_folder=True,
-                 human=False, include_stats=True, whitelist=False):
+    def __init__(self, path: str = '.', blacklist: str = None, include_folder: bool = True,
+                 human: bool = False, include_stats: bool = True, whitelist: str = None):
         self.files = {}
         self.path = path
-        self.exclude = exclude
+        self.blacklist = blacklist
         self.human = human
         self.whitelist = whitelist
         self.include_folder = include_folder
         self.include_stats = include_stats
+        self.path_size = 0
 
     def readable(self, num, suffix='B'):
         """ Convert Bytes into human readable formats """
@@ -94,6 +95,8 @@ class ShowPath:
         and converts them to class FileInfo """
         for i, file in enumerate(os.listdir(self.path)):
             is_folder = False
+            filename = file
+            file = f"{self.path}/{file}"
 
             try:
                 size = os.path.getsize(file)
@@ -113,7 +116,7 @@ class ShowPath:
                 continue
 
             try:
-                if any([x.lower() in file.lower() for x in self.exclude]):
+                if any([x.lower() in file.lower() for x in self.blacklist]):
                     continue
             except TypeError:
                 pass
@@ -126,10 +129,17 @@ class ShowPath:
             except TypeError:
                 pass
 
+            self.path_size += size
             self.files[i] = FileInfo(
-                file, size, self.readable(size),
+                filename, size, self.readable(size),
                 is_folder, self.creation_date(file)
             )
+
+        # Now add the current dir as a last touch
+        self.files[len(self.files) + 1] = FileInfo(
+            self.path, self.path_size, self.readable(self.path_size),
+            True, self.creation_date(self.path)
+        )
 
         return self.files
 
